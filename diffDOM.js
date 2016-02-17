@@ -388,12 +388,10 @@
 
 
   function swap(obj, p1, p2) {
-    (function (_) {
-      obj[p1] = obj[p2];
-      obj[p2] = _;
-    } (obj[p1]));
+    var _ = obj[p1];
+    obj[p1] = obj[p2];
+    obj[p2] = _;
   }
-
 
   var DiffTracker = function () {
     this.list = [];
@@ -420,8 +418,8 @@
       maxDepth: false, // False or a numeral. If set to a numeral, limits the level of depth that the the diff mechanism looks for differences. If false, goes through the entire tree.
       valueDiffing: true, // Whether to take into consideration the values of forms that differ from auto assigned values (when a user fills out a form).
       // syntax: textDiff: function (node, currentValue, expectedValue, newValue)
-      textDiff: function () {
-        arguments[0].data = arguments[3];
+      textDiff: function (node, currentValue, expectedValue, newValue) {
+        node.data = newValue;
         return;
       }
     },
