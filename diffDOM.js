@@ -1161,7 +1161,11 @@
                     if (!node || typeof node.value === 'undefined') {
                         return false;
                     }
-                    node.value = diff.newValue;
+                    if (diff.newValue) {
+                        node.value = diff.newValue;
+                    } else {
+                        node.value = null;
+                    }
                     break;
                 case 'modifyComment':
                     if (!node || typeof node.data === 'undefined') {
