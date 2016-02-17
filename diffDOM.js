@@ -557,9 +557,7 @@
             newValue: t2.data
           })];
         }
-
       }
-
 
       attr1 = t1.attributes ? Object.keys(t1.attributes).sort() : [];
       attr2 = t2.attributes ? Object.keys(t2.attributes).sort() : [];
@@ -1287,14 +1285,17 @@
     }
   };
 
-  if (typeof exports !== 'undefined') {
-    if (typeof module !== 'undefined' && module.exports) {
-      exports = module.exports = diffDOM;
-    }
+  if (typeof define === 'function' && define.amd) {
+      // AMD. Register as an anonymous module.
+    define(function() {
+      return diffDOM;
+    });
+  } else if (typeof exports === 'object') {
+    // CommonJS
     exports.diffDOM = diffDOM;
-  } else {
-    // `window` in the browser, or `exports` on the server
+  }
+  else {
+    // Browser global.
     this.diffDOM = diffDOM;
   }
-
-}.call(this));
+}(this));
