@@ -1298,4 +1298,4 @@
     // Browser global.
     this.diffDOM = diffDOM;
   }
-}(this));
+}.call(this));
