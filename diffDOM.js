@@ -22,6 +22,9 @@
 
   var Diff = function (options) {
     var diff = this;
+    if (this.disableUndo === true) {
+      delete options.oldValue;
+    }
     Object.keys(options).forEach(function (option) {
       diff[option] = options[option];
     });
@@ -235,8 +238,8 @@
 
   var cloneObj = function (obj) {
     //  TODO: Do we really need to clone here? Is it not enough to just return the original object?
-    return JSON.parse(JSON.stringify(obj));
-    //return obj;
+    //return JSON.parse(JSON.stringify(obj));
+    return obj;
   };
 
   /**
@@ -437,6 +440,7 @@
       }
     }
 
+    Diff.prototype.disableUndo = (options.disableUndo === true);
   };
   diffDOM.prototype = {
 
@@ -542,21 +546,13 @@
 
       if (t1.data !== t2.data) {
         // Comment or text node.
-        if (t1.nodeName === '#text') {
-          return [new Diff({
-            action: Actions.modifyComment,
-            route: route,
-            oldValue: t1.data,
-            newValue: t2.data
-          })];
-        } else {
-          return [new Diff({
-            action: Actions.modifyTextElement,
-            route: route,
-            oldValue: t1.data,
-            newValue: t2.data
-          })];
-        }
+        var action = t1.nodeName === '#text' ? Actions.modifyTextElement : Actions.modifyComment;
+        return [new Diff({
+          action: action,
+          route: route,
+          oldValue: t1.data,
+          newValue: t2.data
+        })];
       }
 
       attr1 = t1.attributes ? Object.keys(t1.attributes).sort() : [];
@@ -1298,4 +1294,4 @@
     // Browser global.
     this.diffDOM = diffDOM;
   }
-}.call(this));
+}(this));
